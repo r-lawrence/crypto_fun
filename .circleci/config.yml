@@ -1,0 +1,40 @@
+version: 2 
+jobs:  # basic units of work in a run
+  build: 
+    working_directory: ~/porfolio_service # directory where steps will run
+    parallelism: 1  # run only one instance of this job
+    docker:  # run the steps with Docker
+      - image: circleci/elixir:1.13 # ...with this image as the primary container; this is where all `steps` will run
+        environment:  # environment variables for primary container
+          MIX_ENV: test
+      - image: postgres:14.1
+        environment:
+          POSTGRES_USER: postgres
+          POSTGRES_HOST_AUTH_METHOD: trust
+
+    steps:  # commands that comprise the `build` job
+      - checkout  # check out source code to working directory
+      - run: 
+          name: mix hex and rebar
+          command: |
+            mix local.hex --force  
+            mix local.rebar --force  
+      - run:
+          name: build app, create and migrate db
+          command: | # get updated dependencies & compile them
+            mix deps.get
+            mix ecto.create
+            mix deps.compile
+      - run:
+          name: run tests/coverage
+          command: |
+            mix coveralls.json
+      - run: 
+          name: upload coverage
+          command: |
+            curl -Os https://uploader.codecov.io/latest/linux/codecov
+            chmod +x codecov
+            ./codecov -t ${CODECOV_TOKEN}
+
+
+

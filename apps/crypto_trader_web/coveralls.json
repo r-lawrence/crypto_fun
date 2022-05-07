@@ -1,0 +1,40 @@
+{
+  "default_stop_words": [
+    "defmodule",
+    "defrecord",
+    "defimpl",
+    "defexception",
+    "defprotocol",
+    "defstruct",
+    "def.+(.+\\\\.+).+do",
+    "^\\s+use\\s+"
+  ],
+
+  "custom_stop_words": [
+  ],
+
+  "coverage_options": {
+    "treat_no_relevant_lines_as_covered": false,
+    "output_dir": "cover/",
+    "minimum_coverage": 0
+  },
+
+  "terminal_options": {
+    "file_column_width": 0
+  },
+
+  "skip_files": [
+      "lib/crypto_trader_web.ex",
+      "lib/crypto_trader_web/application.ex",
+      "lib/crypto_trader_web/endpoint.ex",
+      "lib/crypto_trader_web/gettext.ex", 
+      "lib/crypto_trader_web/telemetry.ex", 
+      "lib/crypto_trader_web/views/error_helpers.ex", 
+      "lib/crypto_trader_web/views/layout_view.ex", 
+      "lib/crypto_trader_web/views/page_view.ex", 
+      "test"
+    ]
+  
+
+  
+}

@@ -30,7 +30,9 @@
 
 
 ## after you have followed the above install instructions, to get the app running locally. run
-  ## `mix deps.setup`
+  ## `mix deps.get`
+  ## `mix ecto.create`
+  ## `mix deps.compile`
   ## `mix phx.server`
 
 ## navigate to localhost:4000/livechart - assuming no terminal errors have been thrown a graph defualting to current BTC price should appear and start updating.

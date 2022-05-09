@@ -8,8 +8,11 @@
 # configurations or dependencies per app, it is best to
 # move said applications out of the umbrella.
 import Config
-
+# config :binance, Binance.API, binance_service: Binance.API
 # Configure Mix tasks and generators
+
+config :binance, Binance.Client, binance_service: Binance.API
+
 config :crypto_trader,
   ecto_repos: [CryptoTrader.Repo]
 
@@ -20,6 +23,7 @@ config :crypto_trader,
 #
 # For production it's recommended to configure a different adapter
 # at the `config/runtime.exs`.
+
 config :crypto_trader, CryptoTrader.Mailer, adapter: Swoosh.Adapters.Local
 
 # Swoosh API client is needed for adapters other than SMTP.
@@ -28,7 +32,6 @@ config :swoosh, :api_client, false
 config :crypto_trader_web,
   ecto_repos: [CryptoTrader.Repo],
   generators: [context_app: :crypto_trader]
-
 
 # Configures the endpoint
 config :crypto_trader_web, CryptoTraderWeb.Endpoint,

@@ -24,10 +24,8 @@
   },
 
   "skip_files": [
-      "test", 
-      "lib/binance/binance_client.ex"
-    ]
-  
-
-  
+      "test",
+      "lib/binance/api.ex",
+      "lib/binance/api_behaviour.ex"
+    ]  
 }

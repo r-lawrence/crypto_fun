@@ -1,85 +1,59 @@
 defmodule Binance.Client do
+  @moduledoc """
+    the module responsible for establishing a process live ticket stream via
+    the binance API live ticker rest endpoint.  It is possible to connect to
+    a binance API price websocket live ticker...but because we just want a
+    semi real time graph - the rest endpoint + genserver is used
+
+    note:  the websocket live ticker is probably most helpful when creating
+    custom algo to buy/sell currency at a specific price point.
+  """
   use GenServer
 
-  def start_link(args) do
-    GenServer.start_link(__MODULE__, args, name: __MODULE__)
-  end
+  @binance_service Application.get_env(:binance, :binance_service)
 
+  def start_link(_args) do
+    GenServer.start_link(__MODULE__, %{coin: "BTCUSD"}, name: __MODULE__)
+  end
 
   def init(state) do
     schedule_coin_fetch()
+
     {:ok, state}
   end
 
-  def handle_info(:coin_fetch, %{coin: "ETHUSD"} = state) do
-
+  def handle_info(:coin_fetch, %{coin: symbol} = state) do
     current_data =
-      "https://api.binance.us/api/v3/ticker/price?symbol=ETHUSD"
-    |> HTTPoison.get!()
-    |> Map.get(:body)
-    |> Jason.decode!()
-    |> Map.put("time", Time.utc_now())
-
+      @binance_service.get_single_live_ticker_price(symbol) |> Map.put("time", Time.utc_now())
 
     schedule_coin_fetch()
     handle_cast({:push, current_data}, state)
-
-  end
-
-  def handle_info(:coin_fetch, %{coin: "RVNUSD"} = state) do
-
-    current_data =
-      "https://api.binance.us/api/v3/ticker/price?symbol=RVNUSD"
-    |> HTTPoison.get!()
-    |> Map.get(:body)
-    |> Jason.decode!()
-    |> Map.put("time", Time.utc_now())
-
-    schedule_coin_fetch()
-    handle_cast({:push, current_data}, state)
-
-  end
-
-  def handle_info(:coin_fetch, state) do
-    current_data =
-      "https://api.binance.us/api/v3/ticker/price?symbol=BTCUSD"
-    |> HTTPoison.get!()
-    |> Map.get(:body)
-    |> Jason.decode!()
-    |> Map.put("time", Time.utc_now())
-
-    schedule_coin_fetch()
-    handle_cast({:push, current_data}, state)
-
   end
 
   def handle_cast({:push, current_data}, state) do
-
     case Map.get(state, :current_price) do
-      nil -> {:noreply, Map.put(state, :current_price,  [current_data])}
+      nil ->
+        {:noreply, Map.put(state, :current_price, [current_data])}
+
       current_state ->
         single_list = current_state ++ [current_data]
 
         {:noreply, Map.put(state, :current_price, single_list)}
     end
-
   end
 
   def handle_call(:get, _from, state) do
-
     {:reply, state, state}
-
   end
 
-  def schedule_coin_fetch() do
-    Process.send_after(self(), :coin_fetch, 5_000)
-
+  defp schedule_coin_fetch() do
+    Process.send_after(self(), :coin_fetch, 5000)
   end
-
 end
 
 # below is the functionality to connect to a websocket that will push you live candlestick data
-# the module needs to be renamed fa sho. lol 🙃
+# the module needs to be renamed fa sho.... but can is different then the data fetching
+# functionality for a single coin.  This a websocket for live candlestick data for 🙃
 # defmodule Binance.Client do
 #   use WebSockex
 #   @stream_endpoint "wss://stream.binance.com:9443/stream?streams="

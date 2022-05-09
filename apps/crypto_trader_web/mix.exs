@@ -18,7 +18,6 @@ defmodule CryptoTraderWeb.MixProject do
       test_coverage: [
         tool: ExCoveralls
       ]
-
     ]
   end
 
@@ -28,7 +27,7 @@ defmodule CryptoTraderWeb.MixProject do
   def application do
     [
       mod: {CryptoTraderWeb.Application, []},
-      extra_applications: [:logger, :runtime_tools],
+      extra_applications: [:logger, :runtime_tools]
     ]
   end
 
@@ -58,7 +57,6 @@ defmodule CryptoTraderWeb.MixProject do
       {:plug_cowboy, "~> 2.5"},
       {:plug, "~> 1.13.6"},
       {:binance, in_umbrella: true}
-
     ]
   end
 

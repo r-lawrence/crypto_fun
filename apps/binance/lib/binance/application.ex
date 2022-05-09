@@ -11,7 +11,6 @@ defmodule Binance.Application do
       # Starts a worker by calling: Binance.Worker.start_link(arg)
       # {Binance.Worker, arg}
       # {Binance.Static, %{}}
-
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

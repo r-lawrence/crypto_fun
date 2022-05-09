@@ -11,7 +11,7 @@ defmodule CryptoTrader.Application do
       # Start the Ecto repository
       CryptoTrader.Repo,
       # Start the PubSub system
-      {Phoenix.PubSub, name: CryptoTrader.PubSub},
+      {Phoenix.PubSub, name: CryptoTrader.PubSub}
       # Start a worker by calling: CryptoTrader.Worker.start_link(arg)
       # {CryptoTrader.Worker, arg}
     ]

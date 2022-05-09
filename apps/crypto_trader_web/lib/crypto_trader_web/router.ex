@@ -1,6 +1,7 @@
 defmodule CryptoTraderWeb.Router do
   use CryptoTraderWeb, :router
   import Phoenix.LiveView.Router
+
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
@@ -41,7 +42,6 @@ defmodule CryptoTraderWeb.Router do
       pipe_through :browser
 
       live_dashboard "/dashboard", metrics: CryptoTraderWeb.Telemetry
-
     end
   end
 

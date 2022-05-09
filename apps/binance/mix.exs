@@ -10,7 +10,7 @@ defmodule Binance.MixProject do
       deps_path: "../../deps",
       lockfile: "../../mix.lock",
       elixir: "~> 1.13",
-      # elixirc_paths: elixirc_paths(Mix.env()),
+      elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       test_coverage: [
@@ -23,22 +23,20 @@ defmodule Binance.MixProject do
   def application do
     [
       extra_applications: [:logger, :httpoison],
-      mod: {Binance.Application, []},
-
+      mod: {Binance.Application, []}
     ]
   end
 
-  # defp elixirc_paths(:test), do: ["lib", "test/support"]
-  # defp elixirc_paths(_), do: ["lib"]
+  defp elixirc_paths(:test), do: ["lib", "test/support"]
+  defp elixirc_paths(_), do: ["lib"]
 
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:websockex, "~> 0.4.3"},
       {:jason, "~> 1.3.0"},
       {:httpoison, "~> 1.8"},
-      {:poison, "~> 5.0"},
-      {:pubsub, "~> 1.1.1"}
+      {:mox, "~> 1.0.1", only: :test}
+      # {:websockex, "~> 0.4.3"},
       # {:dep_from_hexpm, "~> 0.3.0"},
       # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"},
       # {:sibling_app_in_umbrella, in_umbrella: true}

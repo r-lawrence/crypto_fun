@@ -9,10 +9,8 @@ defmodule CryptoTrader.Fun.Umbrella.MixProject do
       deps: deps(),
       aliases: aliases(),
       test_coverage: [
-
         tool: ExCoveralls
       ],
-      ignore_modules: [CryptoTraderWeb],
       preferred_cli_env: [
         coveralls: :test,
         "coveralls.detail": :test,
@@ -20,7 +18,6 @@ defmodule CryptoTrader.Fun.Umbrella.MixProject do
         "coveralls.html": :test,
         "coveralls.json": :test
       ]
-
     ]
   end
 

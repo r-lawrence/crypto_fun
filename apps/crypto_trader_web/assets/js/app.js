@@ -1,14 +1,6 @@
 // We import the CSS which is extracted to its own file by esbuild.
 // Remove this line if you add a your own CSS build pipeline (e.g postcss).
 import "../css/app.css"
-// import "../node_modules/chart.js"
-
-
-
-
-
-
-
 
 // If you want to use Phoenix channels, run `mix help phx.gen.channel`
 // to get started and then uncomment the line below.
@@ -45,7 +37,6 @@ window.addEventListener("phx:page-loading-start", info => topbar.show())
 window.addEventListener("phx:page-loading-stop", info => topbar.hide())
 window.addEventListener("phx:page-loading-stop", info => topbar.hide())
 
-
 // connect if there are any LiveViews on the page
 liveSocket.connect()
 
@@ -58,21 +49,13 @@ window.liveSocket = liveSocket
 // if we are currently on live chart page, render the live chart
 const isLiveChart = document.getElementsByClassName("liveChart").length
 if (isLiveChart) {
-
-
-
   let currentChart = LiveChart.createChart([], [])
-  console.log(currentChart.config.data)
-  
-
   window.addEventListener('phx:element-updated', (e) => {
     currentChart.config.data.labels = e.detail.labels
     currentChart.config.data.datasets[0].data = e.detail.data
     currentChart.update()
 
   })
-
-
 }
 
 

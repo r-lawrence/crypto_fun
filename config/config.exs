@@ -11,7 +11,7 @@ import Config
 # config :binance, Binance.API, binance_service: Binance.API
 # Configure Mix tasks and generators
 
-config :binance, Binance.Client, binance_service: Binance.API
+config :binance, binance_service: Binance.API
 
 config :crypto_trader,
   ecto_repos: [CryptoTrader.Repo]

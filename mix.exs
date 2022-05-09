@@ -1,4 +1,4 @@
-defmodule CryptoTrader.Fun.Umbrella.MixProject do
+defmodule Crypto.Fun.Umbrella.MixProject do
   use Mix.Project
 
   def project do

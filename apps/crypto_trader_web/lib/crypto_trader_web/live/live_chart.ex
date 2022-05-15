@@ -1,26 +1,15 @@
 defmodule CryptoTraderWeb.LiveChart do
   use Phoenix.LiveView
 
-  def render(assigns) do
-    Phoenix.View.render(CryptoTraderWeb.PageView, "live_chart.html", assigns)
-  end
 
-  def mount(_params, _, socket) do
+
+
+  @spec mount(any, any, Phoenix.LiveView.Socket.t()) :: {:ok, Phoenix.LiveView.Socket.t()}
+  def mount(_params, _session, socket) do
+
+
     if connected?(socket), do: Process.send_after(self(), :update, 5_000)
-
     {:ok, socket}
-  end
-
-  def handle_event("inc_coin_change", %{"value" => symbol}, socket) do
-    current_pid = Map.get(socket, :current_pid)
-    current_symbol = Map.get(socket, :current_symbol)
-
-    if symbol != current_symbol do
-      GenServer.stop(current_pid, :normal)
-      handle_params(%{current_coin: symbol}, "/live-chart", socket)
-    else
-      {:noreply, socket}
-    end
   end
 
   def handle_params(params, _uri, socket) do
@@ -31,9 +20,29 @@ defmodule CryptoTraderWeb.LiveChart do
     Process.send_after(self(), :update, 5_000)
     current_pid = Map.get(socket, :current_pid)
     chart_data = get_and_format_chart_data(current_pid)
+    IO.inspect(chart_data)
 
     {:noreply, push_event(socket, "element-updated", chart_data)}
   end
+
+  def handle_event("inc_coin_change", %{"value" => symbol}, socket) do
+    current_pid = Map.get(socket, :current_pid)
+    current_symbol = Map.get(socket, :current_symbol)
+
+
+    if symbol != current_symbol do
+      GenServer.stop(current_pid, :normal)
+      handle_params(%{current_coin: symbol}, "/live-chart", socket)
+    else
+      {:noreply, socket}
+    end
+  end
+
+  def render(assigns) do
+    Phoenix.View.render(CryptoTraderWeb.PageView, "live_chart.html", assigns)
+  end
+
+
 
   defp handle_coin_link(params, socket) do
     case params do

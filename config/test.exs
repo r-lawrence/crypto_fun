@@ -5,8 +5,13 @@ import Config
 # The MIX_TEST_PARTITION environment variable can be used
 # to provide built-in test partitioning in CI environment.
 # Run `mix help test` for more information.
-config :binance,
+
+config :binance, Binance.API,
   binance_service: Binance.APIMock
+
+
+
+
 
 config :crypto_trader, CryptoTrader.Repo,
   username: "postgres",

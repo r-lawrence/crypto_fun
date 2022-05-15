@@ -5,7 +5,7 @@ const Chart = require("chart.js");
 
 export const LiveChart = {
 createChart: (labels, data) => {
-  var ctx = document.getElementById("LiveChart").getContext("2d");
+  var ctx = document.getElementById("live-chart").getContext("2d");
   return new Chart(ctx, {
     type: "line",
     data: {

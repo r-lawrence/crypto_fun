@@ -18,11 +18,9 @@
     "output_dir": "cover/",
     "minimum_coverage": 0
   },
-
   "terminal_options": {
-    "file_column_width": 0
+    "file_column_width": 40
   },
-
   "skip_files": [
       "lib/crypto_trader_web.ex",
       "lib/crypto_trader_web/application.ex",

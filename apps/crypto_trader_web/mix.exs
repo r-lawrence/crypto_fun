@@ -56,7 +56,10 @@ defmodule CryptoTraderWeb.MixProject do
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"},
       {:plug, "~> 1.13.6"},
-      {:binance, in_umbrella: true}
+      {:binance, in_umbrella: true},
+      {:floki, "~> 0.32.1"},
+      {:httpoison, "~> 1.8"},
+      {:mox, "~> 1.0.1", only: :test}
     ]
   end
 

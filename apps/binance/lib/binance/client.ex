@@ -10,8 +10,7 @@ defmodule Binance.Client do
   """
   use GenServer
 
-  @binance_service Application.get_env(:binance, :binance_service)
-
+  @binance_service Application.get_env(:binance, Binance.API)[:binance_service]
   def start_link(_args) do
     GenServer.start_link(__MODULE__, %{coin: "BTCUSD"}, name: __MODULE__)
   end
@@ -23,6 +22,7 @@ defmodule Binance.Client do
   end
 
   def handle_info(:coin_fetch, %{coin: symbol} = state) do
+
     current_data =
       @binance_service.get_single_live_ticker_price(symbol) |> Map.put("time", Time.utc_now())
 
@@ -31,6 +31,7 @@ defmodule Binance.Client do
   end
 
   def handle_cast({:push, current_data}, state) do
+
     case Map.get(state, :current_price) do
       nil ->
         {:noreply, Map.put(state, :current_price, [current_data])}

@@ -47,7 +47,7 @@ liveSocket.connect()
 window.liveSocket = liveSocket
 
 // if we are currently on live chart page, render the live chart
-const isLiveChart = document.getElementsByClassName("liveChart").length
+const isLiveChart = document.getElementsByClassName("live-chart").length
 if (isLiveChart) {
   let currentChart = LiveChart.createChart([], [])
   window.addEventListener('phx:element-updated', (e) => {

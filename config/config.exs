@@ -10,14 +10,51 @@
 import Config
 # config :binance, Binance.API, binance_service: Binance.API
 # Configure Mix tasks and generators
+config :binance,
+  ecto_repos: CryptoApi
 
 config :binance, Binance.API,
   binance_service: Binance.API
 
 
+###
+config :crypto_api,
+  ecto_repos: [CryptoApi.Repo]
+
+# Configures the endpoint
+config :crypto_api, CryptoApiWeb.Endpoint,
+  url: [host: "localhost"],
+  render_errors: [view: CryptoApiWeb.ErrorView, accepts: ~w(json), layout: false],
+  pubsub_server: CryptoApi.PubSub,
+  live_view: [signing_salt: "nLM1BoHy"]
+
+# Configures the mailer
+#
+# By default it uses the "Local" adapter which stores the emails
+# locally. You can see the emails in your browser, at "/dev/mailbox".
+#
+# For production it's recommended to configure a different adapter
+# at the `config/runtime.exs`.
+config :crypto_api, CryptoApi.Mailer, adapter: Swoosh.Adapters.Local
+
+# Swoosh API client is needed for adapters other than SMTP.
+config :swoosh, :api_client, false
+
+# Configures Elixir's Logger
+config :logger, :console,
+  format: "$time $metadata[$level] $message\n",
+  metadata: [:request_id]
+
+# Use Jason for JSON parsing in Phoenix
+config :phoenix, :json_library, Jason
+
+###
 
 config :crypto_trader,
   ecto_repos: [CryptoTrader.Repo]
+
+
+
 
 # Configures the mailer
 #

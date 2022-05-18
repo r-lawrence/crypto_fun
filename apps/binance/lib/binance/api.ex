@@ -15,4 +15,12 @@ defmodule Binance.API do
     |> Map.get(:body)
     |> Jason.decode!()
   end
+
+  def get_all_live_ticker_prices() do
+    "https://api.binance.us/api/v3/ticker/price"
+    |> HTTPoison.get!()
+    |> Map.get(:body)
+    |> Jason.decode!()
+  end
+
 end

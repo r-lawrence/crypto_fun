@@ -19,8 +19,13 @@ defmodule CryptoTraderWeb.LiveChart do
   def handle_info(:update, socket) do
     Process.send_after(self(), :update, 5_000)
     current_pid = Map.get(socket, :current_pid)
-    chart_data = get_and_format_chart_data(current_pid)
-    IO.inspect(chart_data)
+
+    current_symbol = Map.get(socket, :current_symbol)
+
+
+
+    chart_data = get_and_format_chart_data(current_pid, current_symbol)
+
 
     {:noreply, push_event(socket, "element-updated", chart_data)}
   end
@@ -56,8 +61,11 @@ defmodule CryptoTraderWeb.LiveChart do
     end
   end
 
-  defp start_link(params, socket) do
-    case Binance.Client.start_link(params) do
+  defp start_link(_params, socket) do
+  #  {:ok, pid} =  Binance.Client.start_link()
+
+
+    case Binance.Client.start_link() do
       {:ok, pid} ->
         create_reply(socket, pid)
 
@@ -71,16 +79,22 @@ defmodule CryptoTraderWeb.LiveChart do
     {:noreply, assign(socket, :data, Jason.encode!(%{}))}
   end
 
-  defp get_and_format_chart_data(pid) do
-    data =
-      GenServer.call(pid, :get)
-      |> Map.get(:current_price)
+  defp get_and_format_chart_data(pid, current_symbol) do
 
-    price_list = create_price_list(data)
-    time_list = create_time_list(data)
 
-    %{labels: time_list, data: price_list}
+  %{pricing: status} =
+    GenServer.call(pid, :get) |> IO.inspect()
+
+    case status do
+      :not_loaded->
+        %{labels: "waiting", data: "waiting"}
+      :updated ->
+        current_data = CryptoApi.Exhchanges.list_binance_pricing() |> List.first()
+        data = current_data.current_price_data[current_symbol]
+        %{labels: create_time_list(data), data: create_price_list(data)}
+    end
   end
+
 
   defp create_price_list(data) do
     case data do

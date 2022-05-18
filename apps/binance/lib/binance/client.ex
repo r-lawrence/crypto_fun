@@ -11,46 +11,155 @@ defmodule Binance.Client do
   use GenServer
 
   @binance_service Application.get_env(:binance, Binance.API)[:binance_service]
-  def start_link(_args) do
-    GenServer.start_link(__MODULE__, %{coin: "BTCUSD"}, name: __MODULE__)
+  def start_link() do
+    GenServer.start_link(__MODULE__, %{pricing: :not_loaded}, name: __MODULE__)
   end
 
   def init(state) do
+
     schedule_coin_fetch()
 
     {:ok, state}
   end
 
-  def handle_info(:coin_fetch, %{coin: symbol} = state) do
+
+
+  def handle_info(:coin_fetch, state) do
 
     current_data =
-      @binance_service.get_single_live_ticker_price(symbol) |> Map.put("time", Time.utc_now())
+      @binance_service.get_all_live_ticker_prices()
 
-    schedule_coin_fetch()
-    handle_cast({:push, current_data}, state)
+    format_and_save(current_data)
+    ## transform the data
+    ## save or update the database record
+
+
+    {:noreply, Map.replace(state, :pricing, :updated)}
+    # schedule_coin_fetch()
+    # handle_cast({:push, current_data}, state)
   end
 
-  def handle_cast({:push, current_data}, state) do
-
-    case Map.get(state, :current_price) do
-      nil ->
-        {:noreply, Map.put(state, :current_price, [current_data])}
-
-      current_state ->
-        single_list = current_state ++ [current_data]
-
-        {:noreply, Map.put(state, :current_price, single_list)}
-    end
-  end
 
   def handle_call(:get, _from, state) do
     {:reply, state, state}
   end
 
+  defp format_and_save(current_data_list) do
+   # current_price_data =%{ symbol => [%{price => 32500, time => current_time}]}
+  db_configured_map =
+    Enum.map(current_data_list, fn current_map ->
+      convert_to_list_of_maps(current_map)
+    end)
+    |> Enum.reduce(fn x, y ->
+         Map.merge(x, y, fn _k, v1, v2 -> v2 ++ v1 end)
+    end)
+
+
+    current_db_data = CryptoApi.Exhchanges.list_binance_pricing()
+
+    if current_db_data == [] do
+      attrs = %{current_price_data: db_configured_map, date: Date.utc_today()}
+
+      CryptoApi.Exhchanges.create_binance(attrs)
+    else
+
+      update_db_data(current_db_data, db_configured_map)
+
+    end
+    schedule_coin_fetch()
+  end
+
+  defp convert_to_list_of_maps(map) do
+    current_time = Time.utc_now()
+    symbol = map["symbol"]
+    %{symbol => [%{price: map["price"], time: current_time}]}
+
+
+  end
+
+  defp update_db_data(current_db_data, current_configured_list) do
+
+    ## get list of keys
+    ## iterate through list of keys
+    data = current_db_data |> List.first()
+    new_db_data =
+      Enum.map(data.current_price_data, fn {symbol, value} ->
+        %{symbol => value ++ current_configured_list[symbol]}
+      end)
+      |> Enum.reduce(fn x, y ->
+        Map.merge(x, y, fn _k, v1, v2 -> v2 ++ v1 end)
+      end)
+
+      CryptoApi.Exhchanges.update_binance(data, %{current_price_data: new_db_data})
+
+  end
+
+
+  # def handle_cast({:push, current_data}, state) do
+
+  #   case Map.get(state, :current_price) do
+  #     nil ->
+  #       {:noreply, Map.put(state, :current_price, [current_data])}
+
+  #     current_state ->
+  #       single_list = current_state ++ [current_data]
+
+  #       {:noreply, Map.put(state, :current_price, single_list)}
+  #   end
+  # end
+
+  # end
+
+  # def handle_call(:get, _from, state) do
+  #   {:reply, state, state}
+  # end
+
   defp schedule_coin_fetch() do
     Process.send_after(self(), :coin_fetch, 5000)
   end
 end
+
+
+# below is the old working code from current app-refactor branch
+# def start_link(_args) do
+#   GenServer.start_link(__MODULE__, %{coin: "BTCUSD"}, name: __MODULE__)
+# end
+
+# def init(state) do
+#   schedule_coin_fetch()
+
+#   {:ok, state}
+# end
+
+# def handle_info(:coin_fetch, %{coin: symbol} = state) do
+
+#   current_data =
+#     @binance_service.get_single_live_ticker_price(symbol) |> Map.put("time", Time.utc_now())
+
+#   schedule_coin_fetch()
+#   handle_cast({:push, current_data}, state)
+# end
+
+# def handle_cast({:push, current_data}, state) do
+
+#   case Map.get(state, :current_price) do
+#     nil ->
+#       {:noreply, Map.put(state, :current_price, [current_data])}
+
+#     current_state ->
+#       single_list = current_state ++ [current_data]
+
+#       {:noreply, Map.put(state, :current_price, single_list)}
+#   end
+# end
+
+# def handle_call(:get, _from, state) do
+#   {:reply, state, state}
+# end
+
+# defp schedule_coin_fetch() do
+#   Process.send_after(self(), :coin_fetch, 5000)
+# end
 
 # below is the functionality to connect to a websocket that will push you live candlestick data
 # the module needs to be renamed fa sho.... but can is different then the data fetching

@@ -1,9 +1,9 @@
-defmodule CryptoTraderWeb.MixProject do
+defmodule CryptoApi.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :crypto_trader_web,
+      app: :crypto_api,
       version: "0.1.0",
       build_path: "../../_build",
       config_path: "../../config/config.exs",
@@ -14,10 +14,7 @@ defmodule CryptoTraderWeb.MixProject do
       compilers: [:gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
-      deps: deps(),
-      test_coverage: [
-        tool: ExCoveralls
-      ]
+      deps: deps()
     ]
   end
 
@@ -26,7 +23,7 @@ defmodule CryptoTraderWeb.MixProject do
   # Type `mix help compile.app` for more information.
   def application do
     [
-      mod: {CryptoTraderWeb.Application, []},
+      mod: {CryptoApi.Application, []},
       extra_applications: [:logger, :runtime_tools]
     ]
   end
@@ -42,35 +39,30 @@ defmodule CryptoTraderWeb.MixProject do
     [
       {:phoenix, "~> 1.6.6"},
       {:phoenix_ecto, "~> 4.4"},
-      {:phoenix_html, "~> 3.0"},
-      {:phoenix_live_reload, "~> 1.2", only: :dev},
-      {:phoenix_live_view, "~> 0.17.5"},
-      {:floki, ">= 0.30.0", only: :test},
+      {:ecto_sql, "~> 3.6"},
+      {:postgrex, ">= 0.0.0"},
       {:phoenix_live_dashboard, "~> 0.6"},
-      {:esbuild, "~> 0.3", runtime: Mix.env() == :dev},
+      {:swoosh, "~> 1.3"},
       {:telemetry_metrics, "~> 0.6"},
       {:telemetry_poller, "~> 1.0"},
       {:gettext, "~> 0.18"},
-      {:binance, in_umbrella: true},
-      {:crypto_trader, in_umbrella: true},
       {:jason, "~> 1.2"},
-      {:plug_cowboy, "~> 2.5"},
-      {:plug, "~> 1.13.6"},
-      {:floki, "~> 0.32.1"},
-      {:httpoison, "~> 1.8"},
-      {:mox, "~> 1.0.1", only: :test},
-      {:crypto_api, in_umbrella: true}
+      {:plug_cowboy, "~> 2.5"}
     ]
   end
 
   # Aliases are shortcuts or tasks specific to the current project.
+  # For example, to install project dependencies and perform other setup tasks, run:
+  #
+  #     $ mix setup
   #
   # See the documentation for `Mix` for more info on aliases.
   defp aliases do
     [
-      setup: ["deps.get"],
-      test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
-      "assets.deploy": ["esbuild default --minify", "phx.digest"]
+      setup: ["deps.get", "ecto.setup"],
+      "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
+      "ecto.reset": ["ecto.drop", "ecto.setup"],
+      test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"]
     ]
   end
 end

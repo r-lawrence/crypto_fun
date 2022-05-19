@@ -1,8 +1,19 @@
 
 <div id="main">
-  <button class="coin-button" phx-click='inc_coin_change' value="BTCUSD">BTC</button>
-  <button class="coin-button" phx-click='inc_coin_change' value="ETHUSD">ETH</button>
-  <button class="coin-button" phx-click='inc_coin_change' value="RVNUSD">RVN</button>
+ <%= if @coins == "[]" do%>
+  <section>
+    <div>loading</div>
+  </section>
+  <% else %>
+    <section>
+      <select phx-click='inc_coin_change'>
+        <%= for symbol <- Jason.decode!(@coins) do %>
+          <option class="coin-button" phx-click='inc_coin_change' value={symbol}><%=symbol%></option>
+        <% end %>
+      </select>
+    </section>
+  <% end %>
+
   <section class="live-chart">
     <div>
       <canvas id="live-chart" width="100%" height="100%"></canvas>

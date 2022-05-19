@@ -58,7 +58,7 @@ defmodule Binance.Client do
     current_db_data = CryptoApi.Exhchanges.list_binance_pricing()
 
     if current_db_data == [] do
-      attrs = %{current_price_data: db_configured_map, date: Date.utc_today()}
+      attrs = %{current_price_data: db_configured_map, date: Date.utc_today(), current_symbols: Map.keys(db_configured_map)}
 
       CryptoApi.Exhchanges.create_binance(attrs)
     else

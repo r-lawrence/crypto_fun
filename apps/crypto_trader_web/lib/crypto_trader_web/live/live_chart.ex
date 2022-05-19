@@ -4,16 +4,11 @@ defmodule CryptoTraderWeb.LiveChart do
 
 
 
-  @spec mount(any, any, Phoenix.LiveView.Socket.t()) :: {:ok, Phoenix.LiveView.Socket.t()}
-  def mount(_params, _session, socket) do
-
-
+  def mount(params, _session, socket) do
     if connected?(socket), do: Process.send_after(self(), :update, 5_000)
-    {:ok, socket}
-  end
-
-  def handle_params(params, _uri, socket) do
+    # Binance.Application.start(%{}, %{}) |> IO.inspect()
     handle_coin_link(params, socket)
+    # {:ok, socket}
   end
 
   def handle_info(:update, socket) do
@@ -22,49 +17,70 @@ defmodule CryptoTraderWeb.LiveChart do
 
     current_symbol = Map.get(socket, :current_symbol)
 
+    %{pricing: status} =
+      GenServer.call(current_pid, :get)
 
+    case status do
+      :not_loaded->
+        chart_data = %{labels: "waiting", data: "waiting"}
 
-    chart_data = get_and_format_chart_data(current_pid, current_symbol)
+        {:noreply, push_event(socket, "element-updated", chart_data)}
+      :updated ->
+        current_data = CryptoApi.Exhchanges.list_binance_pricing() |> List.first()
 
+        coins = Map.get(socket.assigns, :coins)
 
-    {:noreply, push_event(socket, "element-updated", chart_data)}
+        case coins do
+          nil ->
+            current_symbols = Map.keys(current_data.current_price_data)
+            handle_info(:update_symbols, current_symbols, socket)
+          _ ->
+            data = current_data.current_price_data[current_symbol]
+            chart_data = %{labels: create_time_list(data), data: create_price_list(data)}
+            {:noreply, push_event(socket, "element-updated", chart_data)}
+        end
+    end
+  end
+
+  def handle_info(:update_symbols, symbols, socket) do
+    {:noreply, assign(socket, :coins, Jason.encode!(symbols))}
   end
 
   def handle_event("inc_coin_change", %{"value" => symbol}, socket) do
-    current_pid = Map.get(socket, :current_pid)
+
     current_symbol = Map.get(socket, :current_symbol)
-
-
     if symbol != current_symbol do
-      GenServer.stop(current_pid, :normal)
-      handle_params(%{current_coin: symbol}, "/live-chart", socket)
+      {:noreply, socket |> Map.replace!(:current_symbol, symbol)}
     else
       {:noreply, socket}
     end
   end
 
   def render(assigns) do
-    Phoenix.View.render(CryptoTraderWeb.PageView, "live_chart.html", assigns)
+    coins = Map.get(assigns, :coins)
+
+    case coins do
+      nil ->
+      assigns = assigns |> Map.put(:coins, Jason.encode!([]))
+      Phoenix.View.render(CryptoTraderWeb.PageView, "live_chart.html", assigns |> IO.inspect())
+      _ ->
+        Phoenix.View.render(CryptoTraderWeb.PageView, "live_chart.html", assigns)
+    end
   end
-
-
 
   defp handle_coin_link(params, socket) do
     case params do
       %{current_coin: coin_symbol} ->
         socket = Map.put(socket, :current_symbol, coin_symbol)
-        start_link(%{coin: coin_symbol}, socket)
+        start_link(socket)
 
       %{} ->
         socket = Map.put(socket, :current_symbol, "BTCUSD")
-        start_link(%{coin: "BTCUSD"}, socket)
+        start_link(socket)
     end
   end
 
-  defp start_link(_params, socket) do
-  #  {:ok, pid} =  Binance.Client.start_link()
-
-
+  defp start_link(socket) do
     case Binance.Client.start_link() do
       {:ok, pid} ->
         create_reply(socket, pid)
@@ -75,26 +91,9 @@ defmodule CryptoTraderWeb.LiveChart do
   end
 
   defp create_reply(socket, pid) do
-    socket = socket |> Map.put(:current_pid, pid)
-    {:noreply, assign(socket, :data, Jason.encode!(%{}))}
+     socket = socket |> Map.put(:current_pid, pid)
+    {:ok, socket}
   end
-
-  defp get_and_format_chart_data(pid, current_symbol) do
-
-
-  %{pricing: status} =
-    GenServer.call(pid, :get) |> IO.inspect()
-
-    case status do
-      :not_loaded->
-        %{labels: "waiting", data: "waiting"}
-      :updated ->
-        current_data = CryptoApi.Exhchanges.list_binance_pricing() |> List.first()
-        data = current_data.current_price_data[current_symbol]
-        %{labels: create_time_list(data), data: create_price_list(data)}
-    end
-  end
-
 
   defp create_price_list(data) do
     case data do

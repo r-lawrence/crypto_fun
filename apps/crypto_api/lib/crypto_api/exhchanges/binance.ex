@@ -7,7 +7,7 @@ defmodule CryptoApi.Exhchanges.Binance do
   schema "binance_pricing" do
     field :current_price_data, :map
     field :date, :date
-
+    field :current_symbols, {:array, :string}
 
     timestamps()
   end
@@ -15,7 +15,7 @@ defmodule CryptoApi.Exhchanges.Binance do
   @doc false
   def changeset(binance, attrs) do
     binance
-    |> cast(attrs, [:current_price_data, :date])
-    |> validate_required([:current_price_data, :date])
+    |> cast(attrs, [:current_price_data, :date, :current_symbols])
+    |> validate_required([:current_price_data, :date, :current_symbols])
   end
 end

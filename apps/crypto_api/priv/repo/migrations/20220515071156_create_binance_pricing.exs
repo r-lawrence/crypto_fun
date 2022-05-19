@@ -6,6 +6,7 @@ defmodule CryptoApi.Repo.Migrations.CreateBinancePricing do
       add :id, :uuid, primary_key: true
       add :current_price_data, :map
       add :date, :date
+      add :current_symbols, {:array, :string}
 
       timestamps()
     end

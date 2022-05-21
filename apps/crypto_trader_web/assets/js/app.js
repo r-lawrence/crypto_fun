@@ -30,7 +30,7 @@ import {LiveChart} from "../vendor/live_chart.js"
 import { PointElement } from "chart.js"
 
 
-let Hooks = {}
+const Hooks = {}
 Hooks.usd = {
   mounted() {
     this.el.addEventListener("input", (e) => {
@@ -78,15 +78,31 @@ liveSocket.connect()
 // >> liveSocket.disableLatencySim()
 window.liveSocket = liveSocket
 
+
+// .classList.add('MyClass');
+// document.getElementById("MyElement").classList.remove('MyClass');
+
 // if we are currently on live chart page, render the live chart
 const isLiveChart = document.getElementsByClassName("live-chart").length
 if (isLiveChart) {
+
+  
   let currentChart = LiveChart.createChart([], [])
   window.addEventListener('phx:element-updated', (e) => {
-    currentChart.config.data.labels = e.detail.labels
-    currentChart.config.data.datasets[0].data = e.detail.data
-    currentChart.update()
+      currentChart.config.data.labels = e.detail.labels
+      currentChart.config.data.datasets[0].data = e.detail.data
+     
 
+
+      // const currentSelectedOption = document.getElementById("selected")
+      // if (currentSelectedOption) {
+      //   currentSelectedOption.style.backgroundColor = "yellow"
+      // } else {
+      //   currentSelectedOption.style.backgroundColor = "white"
+      // }
+   
+    
+      currentChart.update()
   })
 }
 

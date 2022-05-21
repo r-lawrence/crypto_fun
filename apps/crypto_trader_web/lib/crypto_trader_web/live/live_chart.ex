@@ -1,12 +1,8 @@
 defmodule CryptoTraderWeb.LiveChart do
   use Phoenix.LiveView
 
-
-
-
   def mount(params, _session, socket) do
     if connected?(socket), do: Process.send_after(self(), :update, 5_000)
-    # Binance.Application.start(%{}, %{}) |> IO.inspect()
     handle_coin_link(params, socket)
     # {:ok, socket}
   end
@@ -15,7 +11,7 @@ defmodule CryptoTraderWeb.LiveChart do
     Process.send_after(self(), :update, 5_000)
     current_pid = Map.get(socket, :current_pid)
 
-    current_symbol = Map.get(socket, :current_symbol)
+    current_symbol = Map.get(socket.assigns, :current_symbol)
 
     %{pricing: status} =
       GenServer.call(current_pid, :get)
@@ -23,6 +19,8 @@ defmodule CryptoTraderWeb.LiveChart do
     case status do
       :not_loaded->
         chart_data = %{labels: "waiting", data: "waiting"}
+
+
 
         {:noreply, push_event(socket, "element-updated", chart_data)}
       :updated ->
@@ -32,12 +30,10 @@ defmodule CryptoTraderWeb.LiveChart do
 
         case coins do
           nil ->
-            # Map.keys(current_data.current_price_data)
-
+            # IO.inspect(socket.assigns)
             current_symbols = current_data.current_symbols
             handle_info(:update_symbols, current_symbols, socket)
           _ ->
-            # IO.inspect(current_data)
             data = current_data.current_price_data[current_symbol]
             chart_data = %{labels: create_time_list(data), data: create_price_list(data)}
             {:noreply, push_event(socket, "element-updated", chart_data)}
@@ -51,20 +47,21 @@ defmodule CryptoTraderWeb.LiveChart do
   end
 
   def handle_event("inc_coin_change", %{"value" => symbol}, socket) do
-    IO.inspect(symbol, label: "value change yoo")
 
-    current_symbol = Map.get(socket, :current_symbol)
-    if symbol != current_symbol do
-      {:noreply, socket |> Map.replace!(:current_symbol, symbol)}
-    else
-      {:noreply, socket}
-    end
+      # current_symbol = Map.get(socket, :current_symbol)
+    # if symbol != current_symbol do
+      # socket = Map.replace!(socket, :current_symbol, symbol)
+      {:noreply, assign(socket, :current_symbol, symbol)}
+    # else
+    #   {:noreply, socket}
+    # end
   end
 
   # def handle_event("")
 
   def render(assigns) do
     coins = Map.get(assigns, :coins)
+    # current_symbol = Map.get(assigns, :current_symbol)
 
     case coins do
       nil ->
@@ -74,6 +71,7 @@ defmodule CryptoTraderWeb.LiveChart do
         Phoenix.View.render(CryptoTraderWeb.PageView, "live_chart.html", assigns)
     end
   end
+
 
   defp handle_coin_link(params, socket) do
     case params do
@@ -93,14 +91,23 @@ defmodule CryptoTraderWeb.LiveChart do
         create_reply(socket, pid)
 
       {:error, {:already_started, pid}} ->
-        create_reply(socket, pid)
+        already_started_reply(socket, pid)
     end
   end
 
   defp create_reply(socket, pid) do
      socket = socket |> Map.put(:current_pid, pid)
+
+
+    {:ok, assign(socket, :current_symbol, "BTCUSD")}
+  end
+
+  defp already_started_reply(socket, pid) do
+    socket = Map.put(socket, :current_pid, pid)
     {:ok, socket}
   end
+
+
 
   defp create_price_list(data) do
     case data do

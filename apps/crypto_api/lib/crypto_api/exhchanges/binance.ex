@@ -7,7 +7,7 @@ defmodule CryptoApi.Exhchanges.Binance do
   schema "binance_pricing" do
     field :current_price_data, :map
     field :date, :date
-    field :current_symbols, {:array, :string}
+    field :current_symbols, :map
 
     timestamps()
   end

@@ -32,9 +32,12 @@ defmodule CryptoTraderWeb.LiveChart do
 
         case coins do
           nil ->
-            current_symbols = Map.keys(current_data.current_price_data)
+            # Map.keys(current_data.current_price_data)
+
+            current_symbols = current_data.current_symbols
             handle_info(:update_symbols, current_symbols, socket)
           _ ->
+            # IO.inspect(current_data)
             data = current_data.current_price_data[current_symbol]
             chart_data = %{labels: create_time_list(data), data: create_price_list(data)}
             {:noreply, push_event(socket, "element-updated", chart_data)}
@@ -43,10 +46,12 @@ defmodule CryptoTraderWeb.LiveChart do
   end
 
   def handle_info(:update_symbols, symbols, socket) do
-    {:noreply, assign(socket, :coins, Jason.encode!(symbols))}
+
+    {:noreply, assign(socket, :coins, symbols)}
   end
 
   def handle_event("inc_coin_change", %{"value" => symbol}, socket) do
+    IO.inspect(symbol, label: "value change yoo")
 
     current_symbol = Map.get(socket, :current_symbol)
     if symbol != current_symbol do
@@ -56,13 +61,15 @@ defmodule CryptoTraderWeb.LiveChart do
     end
   end
 
+  # def handle_event("")
+
   def render(assigns) do
     coins = Map.get(assigns, :coins)
 
     case coins do
       nil ->
-      assigns = assigns |> Map.put(:coins, Jason.encode!([]))
-      Phoenix.View.render(CryptoTraderWeb.PageView, "live_chart.html", assigns |> IO.inspect())
+      assigns = assigns |> Map.put(:coins, %{})
+      Phoenix.View.render(CryptoTraderWeb.PageView, "live_chart.html", assigns)
       _ ->
         Phoenix.View.render(CryptoTraderWeb.PageView, "live_chart.html", assigns)
     end

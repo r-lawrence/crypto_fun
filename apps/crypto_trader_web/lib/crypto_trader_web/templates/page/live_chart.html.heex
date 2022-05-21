@@ -1,16 +1,32 @@
 
 <div id="main">
- <%= if @coins == "[]" do%>
+ <%= if Map.keys(@coins) == [] do%>
   <section>
     <div>loading</div>
   </section>
   <% else %>
     <section>
-      <select phx-click='inc_coin_change'>
-        <%= for symbol <- Jason.decode!(@coins) do %>
-          <option class="coin-button" phx-click='inc_coin_change' value={symbol}><%=symbol%></option>
+      <label> USD </label>
+      <select id="usd" phx-hook="usd">
+        <%= for symbol <- Map.get(@coins, "USD") do %>
+          <option  class="coin-button" value={symbol}><%=symbol%></option>
         <% end %>
       </select>
+      
+      <label> BTC </label>
+      <select id="btc" phx-hook="btc">
+        <%= for symbol <- Map.get(@coins, "BTC") do %>
+          <option class="coin-button" value={symbol}><%=symbol%></option>
+        <% end %>
+      </select>
+    
+      <label> USDT </label>
+      <select id="usdt" phx-hook="usdt">
+        <%= for symbol <- Map.get(@coins, "USDT") do %>
+          <option class="coin-button" value={symbol}><%=symbol%></option>
+        <% end %>
+      </select>
+
     </section>
   <% end %>
 

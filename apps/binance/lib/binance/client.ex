@@ -45,20 +45,21 @@ defmodule Binance.Client do
   end
 
   defp format_and_save(current_data_list) do
-   # current_price_data =%{ symbol => [%{price => 32500, time => current_time}]}
-  db_configured_map =
-    Enum.map(current_data_list, fn current_map ->
-      convert_to_list_of_maps(current_map)
-    end)
-    |> Enum.reduce(fn x, y ->
-         Map.merge(x, y, fn _k, v1, v2 -> v2 ++ v1 end)
-    end)
 
+    db_configured_map =
+      Enum.map(current_data_list, fn current_map ->
+        convert_to_list_of_maps(current_map)
+      end)
+      |> Enum.reduce(fn x, y ->
+          Map.merge(x, y, fn _k, v1, v2 -> v2 ++ v1 end)
+      end)
+
+    db_configured_symbols = configure_and_save_symbols(db_configured_map)
 
     current_db_data = CryptoApi.Exhchanges.list_binance_pricing()
 
     if current_db_data == [] do
-      attrs = %{current_price_data: db_configured_map, date: Date.utc_today(), current_symbols: Map.keys(db_configured_map)}
+      attrs = %{current_price_data: db_configured_map, date: Date.utc_today(), current_symbols: db_configured_symbols}
 
       CryptoApi.Exhchanges.create_binance(attrs)
     else
@@ -69,16 +70,43 @@ defmodule Binance.Client do
     schedule_coin_fetch()
   end
 
+  defp configure_and_save_symbols(map) do
+   only_symbols = map |> Map.keys()
+
+  usd = get_symbols_from_list(only_symbols, "USD")
+  usdt = get_symbols_from_list(only_symbols, "SDT")
+  btc = get_symbols_from_list(only_symbols, "BTC")
+
+  %{"USD" => usd, "USDT" => usdt, "BTC" => btc}
+
+  end
+
+  defp get_symbols_from_list(list, currency) do
+    Enum.reduce(list,[], fn(x, accum) ->
+      add_matching_symbols(x, accum, currency)
+    end) |> Enum.sort(:asc)
+  end
+
+
+  defp add_matching_symbols(current_symbol, accum, currency) do
+    str_len = String.length(current_symbol)
+    new_string = String.to_charlist(current_symbol)
+    new_list = [Enum.at(new_string, str_len - 3), Enum.at(new_string, str_len - 2), Enum.at(new_string, str_len - 1)]
+
+    case String.to_charlist(currency) == new_list do
+      true -> [current_symbol | accum]
+      _ -> accum
+    end
+  end
+
+
   defp convert_to_list_of_maps(map) do
     current_time = Time.utc_now()
     symbol = map["symbol"]
     %{symbol => [%{price: map["price"], time: current_time}]}
-
-
   end
 
   defp update_db_data(current_db_data, current_configured_list) do
-
     ## get list of keys
     ## iterate through list of keys
     data = current_db_data |> List.first()
@@ -90,7 +118,7 @@ defmodule Binance.Client do
         Map.merge(x, y, fn _k, v1, v2 -> v2 ++ v1 end)
       end)
 
-      CryptoApi.Exhchanges.update_binance(data, %{current_price_data: new_db_data})
+    CryptoApi.Exhchanges.update_binance(data, %{current_price_data: new_db_data})
 
   end
 

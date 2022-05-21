@@ -2,6 +2,7 @@
 // Remove this line if you add a your own CSS build pipeline (e.g postcss).
 import "../css/app.css"
 
+
 // If you want to use Phoenix channels, run `mix help phx.gen.channel`
 // to get started and then uncomment the line below.
 // import "./user_socket.js"
@@ -28,8 +29,39 @@ import topbar from "../vendor/topbar"
 import {LiveChart} from "../vendor/live_chart.js"
 import { PointElement } from "chart.js"
 
+
+let Hooks = {}
+Hooks.usd = {
+  mounted() {
+    this.el.addEventListener("input", (e) => {
+      e.preventDefault()
+       console.log(e.target.value)
+       this.pushEvent("inc_coin_change", {value: e.target.value})
+    })
+  }
+}
+
+Hooks.btc = {
+  mounted() {
+    this.el.addEventListener("input", (e) => {
+      e.preventDefault()
+       console.log(e.target.value)
+       this.pushEvent("inc_coin_change", {value: e.target.value})
+    })
+  }
+}
+
+Hooks.usdt = {
+  mounted() {
+    this.el.addEventListener("input", (e) => {
+      e.preventDefault()
+       console.log(e.target.value)
+       this.pushEvent("inc_coin_change", {value: e.target.value})
+    })
+  }
+}
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
-let liveSocket = new LiveSocket("/live", Socket, {params: {_csrf_token: csrfToken}})
+let liveSocket = new LiveSocket("/live", Socket, {params: {_csrf_token: csrfToken}, hooks: Hooks})
 
 // Show progress bar on live navigation and form submits
 topbar.config({barColors: {0: "#29d"}, shadowColor: "rgba(0, 0, 0, .3)"})

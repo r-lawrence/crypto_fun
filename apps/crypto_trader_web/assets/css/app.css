@@ -126,3 +126,10 @@
 select.selected {
   background-color: yellow;
 }
+
+section.coin-selection {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+ 
+}

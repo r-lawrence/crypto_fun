@@ -5,10 +5,10 @@
     <div>loading</div>
   </section>
   <% else %>
-    <section>
+    <section class="coin-selection">
+    <div class="usd-selection">
       <label> USD </label>
       <select id="usd" phx-hook="usd">
-  
         <%= for {symbol, i} <- Enum.with_index(Map.get(@coins, "USD")) do %>
           <%= if i == 0 do %>
             <%= if String.contains?(@current_symbol, "USD") do%>
@@ -19,23 +19,37 @@
           <% end %>
         <% end %>
       </select>
-      <%# test() %>
+    </div>
+
+    <div class="usd-selection">
       <label> BTC </label>
       <select id="btc" phx-hook="btc">
-        <%= for {symbol, _i} <- Enum.with_index(Map.get(@coins, "BTC")) do %>
-
+        <%= for {symbol, i} <- Enum.with_index(Map.get(@coins, "BTC")) do %>
+          <%= if i == 0 do %>
+            <%= if String.contains?(@current_symbol, "BTC") and not String.contains?(@current_symbol, "BTCUSD") do%>
+              <option class="coin-button" value={@current_symbol}><%=@current_symbol%></option>
+            <% end %>
+          <% else %>
             <option  class="coin-button" value={symbol}><%=symbol%></option>
-         
+          <% end %>
         <% end %>
       </select>
-    
+    </div>
+
+    <div class="usd-selection">
       <label> USDT </label>
       <select id="usdt" phx-hook="usdt">
-        <%= for symbol <- Map.get(@coins, "USDT") do %>
-          <option class="coin-button" value={symbol}><%=symbol%></option>
+        <%= for {symbol, i} <- Enum.with_index(Map.get(@coins, "USDT")) do %>
+          <%= if i == 0 do %>
+            <%= if String.contains?(@current_symbol, "USDT") do%>
+              <option class="coin-button" value={@current_symbol}><%=@current_symbol%></option>
+            <% end %>
+          <% else %>
+            <option  class="coin-button" value={symbol}><%=symbol%></option>
+          <% end %>
         <% end %>
       </select>
-
+    </div>
     </section>
   <% end %>
 

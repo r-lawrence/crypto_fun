@@ -11,22 +11,22 @@ import Config
 # config :binance, Binance.API, binance_service: Binance.API
 # Configure Mix tasks and generators
 config :binance,
-  ecto_repos: CryptoApi
+  ecto_repos: [CryptoEngine.Repo]
 
 config :binance, Binance.API,
   binance_service: Binance.API
 
 
 ###
-config :crypto_api,
-  ecto_repos: [CryptoApi.Repo]
+config :crypto_engine,
+  ecto_repos: [CryptoEngine.Repo]
 
 # Configures the endpoint
-config :crypto_api, CryptoApiWeb.Endpoint,
-  url: [host: "localhost"],
-  render_errors: [view: CryptoApiWeb.ErrorView, accepts: ~w(json), layout: false],
-  pubsub_server: CryptoApi.PubSub,
-  live_view: [signing_salt: "nLM1BoHy"]
+# config :crypto_api, CryptoApiWeb.Endpoint,
+#   url: [host: "localhost"],
+#   render_errors: [view: CryptoApiWeb.ErrorView, accepts: ~w(json), layout: false],
+#   pubsub_server: CryptoApi.PubSub,
+#   live_view: [signing_salt: "nLM1BoHy"]
 
 # Configures the mailer
 #
@@ -35,10 +35,10 @@ config :crypto_api, CryptoApiWeb.Endpoint,
 #
 # For production it's recommended to configure a different adapter
 # at the `config/runtime.exs`.
-config :crypto_api, CryptoApi.Mailer, adapter: Swoosh.Adapters.Local
+# config :crypto_api, CryptoApi.Mailer, adapter: Swoosh.Adapters.Local
 
 # Swoosh API client is needed for adapters other than SMTP.
-config :swoosh, :api_client, false
+# config :swoosh, :api_client, false
 
 # Configures Elixir's Logger
 config :logger, :console,
@@ -48,37 +48,23 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
-###
 
-config :crypto_trader,
-  ecto_repos: [CryptoTrader.Repo]
-
-
-
-
-# Configures the mailer
-#
-# By default it uses the "Local" adapter which stores the emails
-# locally. You can see the emails in your browser, at "/dev/mailbox".
-#
-# For production it's recommended to configure a different adapter
-# at the `config/runtime.exs`.
-
-config :crypto_trader, CryptoTrader.Mailer, adapter: Swoosh.Adapters.Local
 
 # Swoosh API client is needed for adapters other than SMTP.
-config :swoosh, :api_client, false
+# config :swoosh, :api_client, false
 
-config :crypto_trader_web,
-  ecto_repos: [CryptoTrader.Repo],
-  generators: [context_app: :crypto_trader]
+# config :crypto_trader_web,
+#   ecto_repos: [CryptoTrader.Repo],
+#   generators: [context_app: :crypto_trader]
 
 # Configures the endpoint
 config :crypto_trader_web, CryptoTraderWeb.Endpoint,
   url: [host: "localhost"],
   render_errors: [view: CryptoTraderWeb.ErrorView, accepts: ~w(html json), layout: false],
-  pubsub_server: CryptoTrader.PubSub,
+  pubsub_server: CryptoEngine.PubSub,
   live_view: [signing_salt: "AWC/Uy6a"]
+
+  config :crypto_trader_web, CryptoEngine.Mailer, adapter: Swoosh.Adapters.Local
 
 # Configure esbuild (the version is required)
 config :esbuild,

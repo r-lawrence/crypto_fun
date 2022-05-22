@@ -60,12 +60,12 @@ defmodule Binance.Client do
 
     db_configured_symbols = configure_and_save_symbols(db_configured_map)
 
-    current_db_data = CryptoApi.Exhchanges.list_binance_pricing()
+    current_db_data = CryptoEngine.Exhchanges.list_binance_pricing()
 
     if current_db_data == [] do
       attrs = %{current_price_data: db_configured_map, date: Date.utc_today(), current_symbols: db_configured_symbols}
 
-      CryptoApi.Exhchanges.create_binance(attrs)
+      CryptoEngine.Exhchanges.create_binance(attrs)
     else
 
       update_db_data(current_db_data, db_configured_map)
@@ -122,7 +122,7 @@ defmodule Binance.Client do
         Map.merge(x, y, fn _k, v1, v2 -> v2 ++ v1 end)
       end)
 
-    CryptoApi.Exhchanges.update_binance(data, %{current_price_data: new_db_data})
+    CryptoEngine.Exhchanges.update_binance(data, %{current_price_data: new_db_data})
 
   end
 

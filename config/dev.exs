@@ -1,20 +1,20 @@
 import Config
 
 # Configure your database
-config :crypto_trader, CryptoTrader.Repo,
+# config :crypto_trader, CryptoTrader.Repo,
+#   username: "postgres",
+#   password: "postgres",
+#   hostname: "localhost",
+#   database: "crypto_trader_dev",
+#   show_sensitive_data_on_connection_error: true,
+#   pool_size: 10
+
+
+config :crypto_engine, CryptoEngine.Repo,
   username: "postgres",
   password: "postgres",
   hostname: "localhost",
-  database: "crypto_trader_dev",
-  show_sensitive_data_on_connection_error: true,
-  pool_size: 10
-
-
-config :crypto_api, CryptoApi.Repo,
-  username: "postgres",
-  password: "postgres",
-  hostname: "localhost",
-  database: "crypto_api_dev",
+  database: "crypto_engine_dev",
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
 # For development, we disable any cache and enable

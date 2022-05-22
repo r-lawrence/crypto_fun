@@ -51,15 +51,14 @@ defmodule CryptoTraderWeb.MixProject do
       {:telemetry_metrics, "~> 0.6"},
       {:telemetry_poller, "~> 1.0"},
       {:gettext, "~> 0.18"},
-      {:binance, in_umbrella: true},
-      {:crypto_trader, in_umbrella: true},
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"},
       {:plug, "~> 1.13.6"},
       {:floki, "~> 0.32.1"},
       {:httpoison, "~> 1.8"},
       {:mox, "~> 1.0.1", only: :test},
-      {:crypto_api, in_umbrella: true}
+      {:binance, in_umbrella: true},
+      {:crypto_engine, in_umbrella: true}
     ]
   end
 

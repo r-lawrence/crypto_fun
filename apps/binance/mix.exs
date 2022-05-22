@@ -36,7 +36,7 @@ defmodule Binance.MixProject do
       {:jason, "~> 1.3.0"},
       {:httpoison, "~> 1.8"},
       {:mox, "~> 1.0.1", only: :test},
-      {:crypto_api, in_umbrella: true}
+      {:crypto_engine, in_umbrella: true}
       # {:websockex, "~> 0.4.3"},
       # {:dep_from_hexpm, "~> 0.3.0"},
       # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"},

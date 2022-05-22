@@ -12,10 +12,10 @@ defmodule CryptoTraderWeb.LiveChart do
 
   def handle_params(%{} = _params, socket) do
     ## handle default BTC chart data on entry
-    case CryptoApi.Exhchanges.list_binance_pricing() |> List.first() do
+    case CryptoEngine.Exhchanges.list_binance_pricing() |> List.first() do
       nil ->
         {:ok, socket}
-     %CryptoApi.Exhchanges.Binance{current_symbols: symbols, current_price_data: %{"BTCUSD" => price_data}} ->
+     %CryptoEngine.Exhchanges.Binance{current_symbols: symbols, current_price_data: %{"BTCUSD" => price_data}} ->
 
       chart_data = %{labels: create_time_list(price_data), data: create_price_list(price_data), selectedSymbol: "BTCUSD"}
 
@@ -34,7 +34,7 @@ defmodule CryptoTraderWeb.LiveChart do
       GenServer.call(Binance.Client, :get)
 
       if status == :updated do
-        current_data = CryptoApi.Exhchanges.list_binance_pricing() |> List.first()
+        current_data = CryptoEngine.Exhchanges.list_binance_pricing() |> List.first()
         data = current_data.current_price_data[current_symbol]
         chart_data = %{labels: create_time_list(data), data: create_price_list(data), selectedSymbol: current_symbol}
         {:noreply, push_event(socket, "element-updated", chart_data)}

@@ -12,7 +12,7 @@
         <%= for {symbol, i} <- Enum.with_index(Map.get(@coins, "USD")) do %>
           <%= if i == 0 do %>
             <%= if String.contains?(@current_symbol, "USD") do%>
-              <option id="selected" class="coin-button" value={@current_symbol}><%=@current_symbol%></option>
+              <option class="coin-button" value={@current_symbol}><%=@current_symbol%></option>
             <% end %>
           <% else %>
             <option  class="coin-button" value={symbol}><%=symbol%></option>

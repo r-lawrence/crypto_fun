@@ -27,16 +27,18 @@ import {Socket} from "phoenix"
 import {LiveSocket} from "phoenix_live_view"
 import topbar from "../vendor/topbar"
 import {LiveChart} from "../vendor/live_chart.js"
-import { PointElement } from "chart.js"
 
+
+/* hooks can be defined in a different file and imported here to 
+ allow for more organization. */
 
 const Hooks = {}
 Hooks.usd = {
   mounted() {
     this.el.addEventListener("input", (e) => {
       e.preventDefault()
-       console.log(e.target.value)
-       this.pushEvent("inc_coin_change", {value: e.target.value})
+       pushCoinChangeEvent(this, e.target.value)
+      //  this.pushEvent("inc_coin_change", {value: e.target.value})
     })
   }
 }
@@ -45,8 +47,8 @@ Hooks.btc = {
   mounted() {
     this.el.addEventListener("input", (e) => {
       e.preventDefault()
-       console.log(e.target.value)
-       this.pushEvent("inc_coin_change", {value: e.target.value})
+      pushCoinChangeEvent(this, e.target.value)
+      //  this.pushEvent("inc_coin_change", {value: e.target.value})
     })
   }
 }
@@ -55,8 +57,8 @@ Hooks.usdt = {
   mounted() {
     this.el.addEventListener("input", (e) => {
       e.preventDefault()
-       console.log(e.target.value)
-       this.pushEvent("inc_coin_change", {value: e.target.value})
+      pushCoinChangeEvent(this, e.target.value)
+      //  this.pushEvent("inc_coin_change", {value: e.target.value})
     })
   }
 }
@@ -79,32 +81,68 @@ liveSocket.connect()
 window.liveSocket = liveSocket
 
 
-// .classList.add('MyClass');
-// document.getElementById("MyElement").classList.remove('MyClass');
-
 // if we are currently on live chart page, render the live chart
 const isLiveChart = document.getElementsByClassName("live-chart").length
 if (isLiveChart) {
 
-  
+  let selectedType, start, end, currentType;
   let currentChart = LiveChart.createChart([], [])
   window.addEventListener('phx:element-updated', (e) => {
+      let selectElements = document.getElementsByTagName("select")
+
+      currentSymbol = e.detail.selectedSymbol
+      start = currentSymbol.length - 3
+      end = currentSymbol.length
+      selectedType = currentSymbol.substring(start, end)
+
+      if (selectedType !== currentType) {
+        currentType = selectedType;
+        removeSelection(selectElements)
+      }
+
+      handleSelectType(selectedType)
+
       currentChart.config.data.labels = e.detail.labels
       currentChart.config.data.datasets[0].data = e.detail.data
-     
-
-
-      // const currentSelectedOption = document.getElementById("selected")
-      // if (currentSelectedOption) {
-      //   currentSelectedOption.style.backgroundColor = "yellow"
-      // } else {
-      //   currentSelectedOption.style.backgroundColor = "white"
-      // }
-   
-    
       currentChart.update()
-  })
+      })
+
 }
+// below can be moved to helper for better oraganization.
+const pushCoinChangeEvent = (element, value) => {
+  element.pushEvent("inc_coin_change", {value: value})
+}
+
+const handleSelectType = (type) => {
+  switch(type) {
+    case "USD":
+      addSelect("usd")
+      break
+    case "BTC":
+      addSelect("btc")
+      break
+    case "SDT": 
+      addSelect('usdt')
+      break
+  }
+}
+
+const addSelect = (id) => {
+  currentSelect = document.getElementById(id)
+  currentSelect.classList.add("selected")
+
+}
+
+const removeSelection = (selectElements) => {
+  Array.from(selectElements).forEach((element) => {
+    if (element.className.length) {
+      element.className = ""
+    }
+
+  })
+  return selectElements
+} 
+
 
 
 

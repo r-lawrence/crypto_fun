@@ -11,6 +11,10 @@ defmodule Binance.Client do
   use GenServer
 
   @binance_service Application.get_env(:binance, Binance.API)[:binance_service]
+
+  def start_link(_args) do
+    GenServer.start_link(__MODULE__, %{pricing: :not_loaded}, name: __MODULE__)
+  end
   def start_link() do
     GenServer.start_link(__MODULE__, %{pricing: :not_loaded}, name: __MODULE__)
   end

@@ -11,8 +11,10 @@ defmodule CryptoTraderWeb.Application do
       # Start the Telemetry supervisor
       CryptoTraderWeb.Telemetry,
       # Start the Endpoint (http/https)
-      CryptoTraderWeb.Endpoint
+      CryptoTraderWeb.Endpoint,
+      Binance.Client
       # Start a worker by calling: CryptoTraderWeb.Worker.start_link(arg)
+
       # {CryptoTraderWeb.Worker, arg}
     ]
 

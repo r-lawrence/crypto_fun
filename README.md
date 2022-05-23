@@ -1,6 +1,6 @@
 # CryptoTrader.Umbrella
-[![CircleCI](https://circleci.com/gh/rlawrence9/crypto_trader_fun_umbrella/tree/main.svg?style=svg)](https://circleci.com/gh/rlawrence9/crypto_trader_fun_umbrella/tree/main)
-[![codecov](https://codecov.io/gh/rlawrence9/crypto_trader_fun_umbrella/branch/main/graph/badge.svg?token=hZJnEHI7AS)](https://codecov.io/gh/rlawrence9/crypto_trader_fun_umbrella)
+[![CircleCI](https://circleci.com/gh/rlawrence9/crypto_fun/tree/main.svg?style=svg)](https://circleci.com/gh/rlawrence9/crypto_fun/tree/main)
+[![codecov](https://codecov.io/gh/rlawrence9/crypto_fun/branch/main/graph/badge.svg?token=hZJnEHI7AS)](https://codecov.io/gh/rlawrence9/crypto_fun)
 
 ## whatsss up - this is a simple app I created using binance API, elixir/phoenix, sprinkled with some chart js.  I picked up elixir about 6 months ago, this app was built in like month actual working time... so it might not be perfect =) - but eyyyy, you can use it to buy and sell some of your currency with the right price algo and new API endpoint functionality 🤙
 

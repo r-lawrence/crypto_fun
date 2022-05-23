@@ -50,21 +50,17 @@ config :phoenix, :json_library, Jason
 
 
 
-# Swoosh API client is needed for adapters other than SMTP.
-# config :swoosh, :api_client, false
 
-# config :crypto_trader_web,
-#   ecto_repos: [CryptoTrader.Repo],
-#   generators: [context_app: :crypto_trader]
+
 
 # Configures the endpoint
-config :crypto_trader_web, CryptoTraderWeb.Endpoint,
+config :crypto_web, CryptoWeb.Endpoint,
   url: [host: "localhost"],
-  render_errors: [view: CryptoTraderWeb.ErrorView, accepts: ~w(html json), layout: false],
+  render_errors: [view: CryptoWeb.ErrorView, accepts: ~w(html json), layout: false],
   pubsub_server: CryptoEngine.PubSub,
   live_view: [signing_salt: "AWC/Uy6a"]
 
-  config :crypto_trader_web, CryptoEngine.Mailer, adapter: Swoosh.Adapters.Local
+  config :crypto_web, CryptoEngine.Mailer, adapter: Swoosh.Adapters.Local
 
 # Configure esbuild (the version is required)
 config :esbuild,
@@ -72,7 +68,7 @@ config :esbuild,
   default: [
     args:
       ~w(js/app.js --bundle --target=es2017 --outdir=../priv/static/assets --external:/fonts/* --external:/images/*),
-    cd: Path.expand("../apps/crypto_trader_web/assets", __DIR__),
+    cd: Path.expand("../apps/crypto_web/assets", __DIR__),
     env: %{"NODE_PATH" => Path.expand("../deps", __DIR__)}
   ]
 

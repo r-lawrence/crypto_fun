@@ -15,9 +15,6 @@ defmodule Binance.Client do
   def start_link(_args) do
     GenServer.start_link(__MODULE__, %{pricing: :not_loaded}, name: __MODULE__)
   end
-  def start_link() do
-    GenServer.start_link(__MODULE__, %{pricing: :not_loaded}, name: __MODULE__)
-  end
 
   def init(state) do
 

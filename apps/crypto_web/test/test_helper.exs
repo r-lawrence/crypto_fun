@@ -1,5 +1,5 @@
 ExUnit.start()
-Ecto.Adapters.SQL.Sandbox.mode(CryptoEngine.Repo, :manual)
+# Ecto.Adapters.SQL.Sandbox.mode(CryptoEngine.Repo, :manual)
 Application.put_env(:binance, :binance_service, Binance.APIStub)
 Application.put_env(:binance, :binance_client, Binance.ClientStub)
 

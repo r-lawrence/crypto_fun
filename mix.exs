@@ -51,7 +51,13 @@ defmodule Crypto.Fun.Umbrella.MixProject do
   defp aliases do
     [
       # run `mix setup` in all child apps
-      setup: ["cmd mix setup"]
+      setup: ["cmd mix setup"],
+      # binance: "cmd --app binance mix test --color"
+      test: ["cmd --app binance mix test --color", "cmd --app crypto_engine mix test --color", "cmd --app crypto_web mix test --color"],
+      "test:binance": "cmd --app binance mix test --color",
+      "test:crypto_engine": "cmd --app crypto_engine mix test --color",
+      "test:crypto_web": "cmd --app crypto_web mix test --color"
+
     ]
   end
 end

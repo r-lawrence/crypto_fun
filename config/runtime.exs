@@ -16,11 +16,11 @@ if config_env() == :prod do
 
   maybe_ipv6 = if System.get_env("ECTO_IPV6"), do: [:inet6], else: []
 
-  # config :crypto_engine, CryptoEngine.Repo,
-  #   # ssl: true,
-  #   url: database_url,
-  #   pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10"),
-  #   socket_options: maybe_ipv6
+  config :crypto_engine, CryptoEngine.Repo,
+    # ssl: true,
+    url: database_url,
+    pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10"),
+    socket_options: maybe_ipv6
 
   # The secret key base is used to sign/encrypt cookies and other secrets.
   # A default value is used in config/dev.exs and config/test.exs but you
@@ -67,7 +67,7 @@ if config_env() == :prod do
   # For this example you need include a HTTP client required by Swoosh API client.
   # Swoosh supports Hackney and Finch out of the box:
   #
-      # config :swoosh, :api_client, Swoosh.ApiClient.Hackney
+      config :swoosh, :api_client, false
   #
   # See https://hexdocs.pm/swoosh/Swoosh.html#module-installation for details.
 end

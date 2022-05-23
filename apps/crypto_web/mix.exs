@@ -54,7 +54,6 @@ defmodule CryptoWeb.MixProject do
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"},
       {:plug, "~> 1.13.6"},
-      {:floki, "~> 0.32.1"},
       {:httpoison, "~> 1.8"},
       {:mox, "~> 1.0.1", only: :test},
       {:binance, in_umbrella: true},

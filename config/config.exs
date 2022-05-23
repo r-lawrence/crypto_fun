@@ -10,16 +10,21 @@
 import Config
 # config :binance, Binance.API, binance_service: Binance.API
 # Configure Mix tasks and generators
+
+config :crypto_engine,
+  ecto_repos: [CryptoEngine.Repo]
+
 config :binance,
   ecto_repos: [CryptoEngine.Repo]
 
 config :binance, Binance.API,
   binance_service: Binance.API
 
+config :crypto_web,
+  ecto_repos: [CryptoEngine.Repo]
 
 ###
-config :crypto_engine,
-  ecto_repos: [CryptoEngine.Repo]
+
 
 # Configures the endpoint
 # config :crypto_api, CryptoApiWeb.Endpoint,
@@ -38,7 +43,7 @@ config :crypto_engine,
 # config :crypto_api, CryptoApi.Mailer, adapter: Swoosh.Adapters.Local
 
 # Swoosh API client is needed for adapters other than SMTP.
-# config :swoosh, :api_client, false
+config :swoosh, :api_client, false
 
 # Configures Elixir's Logger
 config :logger, :console,
@@ -49,10 +54,6 @@ config :logger, :console,
 config :phoenix, :json_library, Jason
 
 
-
-
-
-
 # Configures the endpoint
 config :crypto_web, CryptoWeb.Endpoint,
   url: [host: "localhost"],
@@ -60,7 +61,7 @@ config :crypto_web, CryptoWeb.Endpoint,
   pubsub_server: CryptoEngine.PubSub,
   live_view: [signing_salt: "AWC/Uy6a"]
 
-  config :crypto_web, CryptoEngine.Mailer, adapter: Swoosh.Adapters.Local
+  # config :crypto_web, CryptoEngine.Mailer, adapter: Swoosh.Adapters.Local
 
 # Configure esbuild (the version is required)
 config :esbuild,

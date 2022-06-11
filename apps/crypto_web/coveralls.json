@@ -1,0 +1,36 @@
+{
+  "default_stop_words": [
+    "defmodule",
+    "defrecord",
+    "defimpl",
+    "defexception",
+    "defprotocol",
+    "defstruct",
+    "def.+(.+\\\\.+).+do",
+    "^\\s+use\\s+"
+  ],
+
+  "custom_stop_words": [
+  ],
+
+  "coverage_options": {
+    "treat_no_relevant_lines_as_covered": false,
+    "output_dir": "cover/",
+    "minimum_coverage": 0
+  },
+  "terminal_options": {
+    "file_column_width": 40
+  },
+  "skip_files": [
+      "lib/crypto_web.ex",
+      "lib/crypto_web/application.ex",
+      "lib/crypto_web/endpoint.ex",
+      "lib/crypto_web/gettext.ex", 
+      "lib/crypto_web/telemetry.ex", 
+      "lib/crypto_web/views/error_helpers.ex", 
+      "lib/crypto_web/views/layout_view.ex", 
+      "lib/crypto_web/views/page_view.ex", 
+      "lib/crypto_web/live/live_chart_behaviour", 
+      "test"
+    ]
+}

@@ -28,7 +28,7 @@ jobs:  # basic units of work in a run
       - run:
           name: run tests/coverage
           command: |
-            mix coveralls.json
+            mix test:coveralls
       - run: 
           name: upload coverage
           command: |

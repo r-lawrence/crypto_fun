@@ -1,3 +1,0 @@
-# CryptoTrader
-
-**TODO: Add description**

@@ -18,16 +18,14 @@
     "output_dir": "cover/",
     "minimum_coverage": 0
   },
-
   "terminal_options": {
-    "file_column_width": 0
+    "file_column_width": 40
   },
 
   "skip_files": [
-      "test", 
-      "lib/binance/binance_client.ex"
-    ]
-  
-
-  
+      "test",
+      "lib/binance/api.ex",
+      "lib/binance/api_behaviour.ex",
+      "lib/binance.ex"
+    ]  
 }

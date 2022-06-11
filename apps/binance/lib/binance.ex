@@ -1,6 +1,6 @@
 defmodule Binance do
   @moduledoc """
-  Documentation for `Binance`.
+    An application that allows for the fetching of data via Binance.US API.
   """
 
   @doc """
@@ -12,8 +12,6 @@ defmodule Binance do
       :world
 
   """
-
-
 
   def hello do
     :world

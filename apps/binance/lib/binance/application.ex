@@ -7,13 +7,7 @@ defmodule Binance.Application do
 
   @impl true
   def start(_type, _args) do
-    children = [
-      # Starts a worker by calling: Binance.Worker.start_link(arg)
-      # {Binance.Worker, arg}
-      # {Binance.Static, %{}}
-
-    ]
-
+    children = []
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
     opts = [strategy: :one_for_one, name: Binance.Supervisor]

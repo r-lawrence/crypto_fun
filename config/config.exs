@@ -8,10 +8,25 @@
 # configurations or dependencies per app, it is best to
 # move said applications out of the umbrella.
 import Config
-
+# config :binance, Binance.API, binance_service: Binance.API
 # Configure Mix tasks and generators
-config :crypto_trader,
-  ecto_repos: [CryptoTrader.Repo]
+
+config :crypto_engine,
+  ecto_repos: [CryptoEngine.Repo]
+
+config :binance,
+  ecto_repos: [CryptoEngine.Repo]
+
+
+config :binance, Binance.API,
+  binance_service: Binance.API
+
+config :crypto_web, CryptoWeb.LiveChart,
+  genserver_adapter: CryptoWeb.LiveChart
+
+
+config :crypto_web,
+  ecto_repos: [CryptoEngine.Repo]
 
 # Configures the mailer
 #
@@ -20,21 +35,23 @@ config :crypto_trader,
 #
 # For production it's recommended to configure a different adapter
 # at the `config/runtime.exs`.
-config :crypto_trader, CryptoTrader.Mailer, adapter: Swoosh.Adapters.Local
-
 # Swoosh API client is needed for adapters other than SMTP.
 config :swoosh, :api_client, false
 
-config :crypto_trader_web,
-  ecto_repos: [CryptoTrader.Repo],
-  generators: [context_app: :crypto_trader]
+# Configures Elixir's Logger
+config :logger, :console,
+  format: "$time $metadata[$level] $message\n",
+  metadata: [:request_id]
+
+# Use Jason for JSON parsing in Phoenix
+config :phoenix, :json_library, Jason
 
 
 # Configures the endpoint
-config :crypto_trader_web, CryptoTraderWeb.Endpoint,
+config :crypto_web, CryptoWeb.Endpoint,
   url: [host: "localhost"],
-  render_errors: [view: CryptoTraderWeb.ErrorView, accepts: ~w(html json), layout: false],
-  pubsub_server: CryptoTrader.PubSub,
+  render_errors: [view: CryptoWeb.ErrorView, accepts: ~w(html json), layout: false],
+  pubsub_server: CryptoEngine.PubSub,
   live_view: [signing_salt: "AWC/Uy6a"]
 
 # Configure esbuild (the version is required)
@@ -43,7 +60,7 @@ config :esbuild,
   default: [
     args:
       ~w(js/app.js --bundle --target=es2017 --outdir=../priv/static/assets --external:/fonts/* --external:/images/*),
-    cd: Path.expand("../apps/crypto_trader_web/assets", __DIR__),
+    cd: Path.expand("../apps/crypto_web/assets", __DIR__),
     env: %{"NODE_PATH" => Path.expand("../deps", __DIR__)}
   ]
 

@@ -35,7 +35,7 @@ defmodule CryptoWeb.LiveChart do
   end
 
 
-  def handle_info(:update, %{assigns: %{current_symbol: current_symbol}} = socket) do
+  def handle_info(:update, %{assigns: %{current_symbol: current_symbol, coins: _symbols}} = socket) do
     Process.send_after(socket.root_pid, :update, 5_000)
     case adapter().get_client_status() do
       %{pricing: :updated} ->
@@ -52,7 +52,7 @@ defmodule CryptoWeb.LiveChart do
   end
 
   def handle_info(:update, socket) do
-    {:noreply, socket}
+    {:noreply, push_redirect(socket, to: "/")}
   end
 
   def handle_event("inc_coin_change", %{"value" => symbol}, socket) do

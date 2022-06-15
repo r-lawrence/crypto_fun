@@ -1,13 +1,10 @@
 
 <div id="main">
- <%= if Map.keys(@coins) == [] do%>
-  <section>
-    <div>loading</div>
-  </section>
-  <% else %>
+ <%= if @coins != %{} do%>
+
     <section class="coin-selection">
       <div class="usd-selection">
-        <label> USD </label>
+        <label class="usd-selection-label"> USD </label>
         <select id="usd" phx-hook="usd">
           <%= for {symbol, i} <- Enum.with_index(Map.get(@coins, "USD")) do %>
             <%= if i == 0 do %>
@@ -21,8 +18,8 @@
         </select>
       </div>
 
-      <div class="usd-selection">
-        <label> BTC </label>
+      <div class="btc-selection">
+        <label class="btc-selection-label"> BTC </label>
         <select id="btc" phx-hook="btc">
           <%= for {symbol, i} <- Enum.with_index(Map.get(@coins, "BTC")) do %>
             <%= if i == 0 do %>
@@ -36,8 +33,8 @@
         </select>
       </div>
 
-      <div class="usd-selection">
-        <label> USDT </label>
+      <div class="usdt-selection">
+        <label class="usdt-selection-label"> USDT </label>
         <select id="usdt" phx-hook="usdt">
           <%= for {symbol, i} <- Enum.with_index(Map.get(@coins, "USDT")) do %>
             <%= if i == 0 do %>
@@ -51,11 +48,21 @@
         </select>
       </div>
       </section>
+      
     <% end %>
 
-    <section class="live-chart">
-      <div>
-        <canvas id="live-chart" class="chart" width="100%" height="100%"></canvas>
+
+
+
+  
+    <span id="loading"> loading please wait.... </span>
+  
+
+
+    <section class="live-chart hide">
+      <div class="live-chart-container">
+        <canvas id="live-chart" class="chart"></canvas>
       </div>
     </section>
+
 </div>

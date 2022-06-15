@@ -43,7 +43,8 @@ defmodule Binance.MixProject do
       {:httpoison, "~> 1.8"},
       {:mox, "~> 1.0.1", only: :test},
       {:crypto_engine, in_umbrella: true},
-      {:excoveralls, "~> 0.14.4", only: :test}
+      {:excoveralls, "~> 0.14.4", only: :test},
+      {:timex, "~> 3.7.8"}
     ]
   end
 

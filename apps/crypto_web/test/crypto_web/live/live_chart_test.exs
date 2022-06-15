@@ -66,7 +66,7 @@ defmodule CryptoWeb.LiveChartTest do
       %{socket: socket} =
         %{socket: %Phoenix.LiveView.Socket{assigns: %{current_symbol: "ETHBTC"}}}
 
-      assert {:noreply, socket} == LiveChart.handle_info(:update, socket)
+      assert {:noreply, socket} = LiveChart.handle_info(:update, socket)
     end
 
     test "when binance pricing status is updated: given :update atom and socket, returns a no reply tuple with socket containing element-updated event",
@@ -99,7 +99,7 @@ defmodule CryptoWeb.LiveChartTest do
       %{socket: socket} =
         %{socket: %Phoenix.LiveView.Socket{}}
 
-        assert {:noreply, socket} == LiveChart.handle_info(:update, socket)
+        assert {:noreply, socket} = LiveChart.handle_info(:update, socket)
     end
   end
 
@@ -128,7 +128,7 @@ defmodule CryptoWeb.LiveChartTest do
         conn
         |> Map.put(:assigns, %{})
 
-        %Plug.Conn{resp_body: html_body} = get(conn, "/live-chart",%{})
+        %Plug.Conn{resp_body: html_body} = get(conn, "/",%{})
 
         page_text =
           html_body
@@ -143,7 +143,7 @@ defmodule CryptoWeb.LiveChartTest do
         %{pricing: :updated}
       end)
       conn = build_conn()
-      %Plug.Conn{resp_body: html_body} = get(conn, "/live-chart",%{})
+      %Plug.Conn{resp_body: html_body} = get(conn, "/",%{})
 
 
       coin_section_text =

@@ -89,7 +89,7 @@ defmodule Binance.Client do
 
 
   defp convert_to_list_of_maps(map) do
-    current_time = Time.utc_now()
+    current_time = DateTime.utc_now()
     symbol = map["symbol"]
     %{symbol => [%{price: map["price"], time: current_time}]}
   end

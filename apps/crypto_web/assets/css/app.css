@@ -1,5 +1,28 @@
 /* This file is for your main application CSS */
-@import "./phoenix.css";
+/* @import "./phoenix.css"; */
+
+.live-chart-container {
+  height: 40%;
+  width: 80%;
+  margin-right: auto;
+  margin-left: auto;
+}
+.live-chart.hide {
+  visibility: hidden;
+}
+#loading {
+  display: table;
+  margin: 0 auto;
+}
+
+#home-page-title {
+  text-align: center;
+  font-weight: bold;
+}
+
+.hide {
+  visibility: hidden;
+}
 
 /* Alerts and form errors used by phx.new */
 .alert {
@@ -119,12 +142,34 @@
   100% { opacity: 0; }
 }
 
-.selected {
-  background-color: yellow;
+select#usd, select#btc, select#usdt {
+  outline-color: purple;
+  border-radius: 5px;
+  border-width: 2.5px;
 }
 
 select.selected {
-  background-color: yellow;
+  color:purple !important;
+  font-weight: bold;
+  border-color: purple;
+  outline-color: purple;
+}
+  
+select.selected:active{
+  color:purple;
+  font-weight: bold;
+  outline-color: purple;
+  border-color: purple;
+}
+
+div.usd-selection, div.btc-selection, div.usdt-selection{
+  display: flex;
+  flex-direction: column;
+}
+
+label.usd-selection-label, label.btc-selection-label, label.usdt-selection-label {
+  text-align: center;
+  padding: 2px;
 }
 
 section.coin-selection {

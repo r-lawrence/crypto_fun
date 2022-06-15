@@ -4,7 +4,8 @@ const Chart = require("chart.js");
 
 
 export const LiveChart = {
-createChart: (labels, data) => {
+createChart: (labels, data, symbol) => {
+
   var ctx = document.getElementById("live-chart").getContext("2d");
   return new Chart(ctx, {
     type: "line",
@@ -13,7 +14,7 @@ createChart: (labels, data) => {
       labels: labels,
       datasets: [
         {
-          label: "Crypto Live",
+          label: symbol + " live",
 
           // Adjust the colors and Background here if you need
           backgroundColor: "rgba(155, 89, 182,0.2)",
@@ -23,6 +24,7 @@ createChart: (labels, data) => {
           //we make sure of the following variable to available in the template that uses this JS
           data: data,
         },
+
       ],
     },
 

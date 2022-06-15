@@ -58,7 +58,6 @@ defmodule CryptoEngine.MixProject do
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"},
       {:excoveralls, "~> 0.14.4", only: :test}
-
     ]
   end
 

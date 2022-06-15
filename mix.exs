@@ -39,7 +39,7 @@ defmodule Crypto.Fun.Umbrella.MixProject do
   # and cannot be accessed from applications inside the apps/ folder.
   defp aliases do
     [
-      setup: ["cmd mix setup"],
+      setup: ["cmd mix deps.get", "cmd mix deps.compile"],
       "test:coveralls": ["cmd --app binance mix coveralls.json", "cmd --app crypto_engine mix coveralls.json", "cmd --app crypto_web mix coveralls.json"],
       test: ["cmd --app binance mix test --color", "cmd --app crypto_engine mix test --color", "cmd --app crypto_web mix test --color"],
       "test:binance": "cmd --app binance mix test --color",

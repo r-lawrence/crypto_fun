@@ -25,8 +25,10 @@ _**Crypto_fun is a phoenix umbrella application that consists of three apps:**_
 2) download the crypto_fun repo to your local. 
 3) navigate into crypto_fun directory using `cd crypto_fun`
 4) setup the repo and all its dependancies with `mix setup`
-5) start your local server using `mix phx.server`
-7) navigate to http://localhost:4000/ to view the app
+5) create database with `mix ecto.create`
+6) add database migrations with `mix ecto.migrate`
+7) start your local server using `mix phx.server`
+8) navigate to http://localhost:4000/ to view the app
 
 
 ## Notes:

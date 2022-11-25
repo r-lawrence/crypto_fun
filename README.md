@@ -33,7 +33,7 @@ _**Crypto_fun is a phoenix umbrella application that consists of three apps:**_
 
 ## Notes:
 
-> this app can use alot of modifications, but for MVP sake... it was it is.
+> this app can use alot of modifications, but for MVP sake... it is was it is.
 
 > additional modifications to app may come over time, but nothing is promised
 

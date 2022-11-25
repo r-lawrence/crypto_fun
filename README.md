@@ -37,6 +37,6 @@ _**Crypto_fun is a phoenix umbrella application that consists of three apps:**_
 
 > additional modifications to app may come over time, but nothing is promised
 
-> App uses the Binance.us API for communication.  Additional logic can be ended to use the Binance API endpoints to buy/sell crypto currency.  Given the right price points for a currency, logic can be created to buy/sell the currency between the price point.  This would require alot of additional logic but hey, might be worth it 🙃.
+> App uses the Binance.us API for communication.  Additional logic can be added to use the Binance API endpoints to buy/sell crypto currency.  Given the right price points for a currency, logic can be created to buy/sell the currency between the price point.  This would require alot of additional logic but hey, might be worth it 🙃.
 
 
